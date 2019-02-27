@@ -1,0 +1,70 @@
+﻿@model TodoList.Domain.Models.Todo
+
+@{
+    ViewData["Title"] = "新建任务";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @*@using (Html.BeginForm("Create", "Controller", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.LabelFor(m => m.Title)
+                <div class="input-group">
+                    <div class="form-line">
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = $"请输入标题" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                </div>
+            }*@
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TodoType" class="control-label"></label>
+                    @*<input asp-for="TodoType" class="form-control" />*@
+                    <div class="form-inline">
+                        <select class="form-control col-11" asp-for="TodoType">
+                            @foreach (var todoType in ViewBag.TodoTypes)
+                            {
+                            <option value="@todoType.Id" @(model.TodoType.Id == todoType.Id ? "selected" : "")>@todoType.Name</option>
+                            }
+                        </select>
+                        &nbsp;
+                        <a asp-action="Create" asp-controller="TodoType" class="btn input-group-addon btn-primary">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                    <span asp-validation-for="TodoType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Label" class="control-label"></label>
+                    <input asp-for="Label" class="form-control" />
+                    <span asp-validation-for="Label" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OffTime" class="control-label"></label>
+                    <input asp-for="OffTime" class="form-control" />
+                    <span asp-validation-for="OffTime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="创建" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

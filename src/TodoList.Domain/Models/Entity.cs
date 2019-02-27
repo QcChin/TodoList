@@ -39,6 +39,7 @@ namespace TodoList.Domain.Models
         {
             Updater = userId;
             UpdateDate = DateTime.Now;
+            IsActive = true;
         }
     }
 }

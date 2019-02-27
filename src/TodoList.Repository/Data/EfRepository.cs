@@ -9,7 +9,7 @@ using TodoList.Domain.Models;
 
 namespace TodoList.Repository.Data
 {
-    public abstract class EfRepository<T> : IAsyncRepository<T> where T : Entity
+    public class EfRepository<T> : IAsyncRepository<T> where T : Entity
     {
         protected readonly TodoContext _dbContext;
         public EfRepository(TodoContext dbContext)
@@ -40,12 +40,12 @@ namespace TodoList.Repository.Data
 
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().Where(c=>c.IsActive == true).ToListAsync();
         }
 
         public async Task<IReadOnlyList<T>> GetAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            return await ApplySpecification(spec).Where(c => c.IsActive == true).ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)
@@ -56,6 +56,8 @@ namespace TodoList.Repository.Data
         public async Task<bool> UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.Entry(entity).Property(c => c.Creator).IsModified = false;
+            _dbContext.Entry(entity).Property(c => c.CreateDate).IsModified = false;
             return (await _dbContext.SaveChangesAsync()) == 1;
         }
 

@@ -1,0 +1,61 @@
+﻿@model TodoList.Domain.Models.Todo
+
+@{
+    ViewData["Title"] = "编辑任务分类";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Modify">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" class="form-control" hidden="hidden"/>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TodoType" class="control-label"></label>
+                @*<input asp-for="TodoType" class="form-control" />*@
+                <div class="form-inline">
+                    <select class="form-control col-11" asp-for="TodoType">
+                        @foreach (var todoType in ViewBag.TodoTypes)
+                        {
+                            <option value="@todoType.Id" selected="selected">@todoType.Name</option>
+                        }
+                    </select>
+                    &nbsp;
+                    <a asp-action="Create" asp-controller="TodoType" class="btn input-group-addon btn-primary">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+                <span asp-validation-for="TodoType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Label" class="control-label"></label>
+                <input asp-for="Label" class="form-control" />
+                <span asp-validation-for="Label" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OffTime" class="control-label"></label>
+                <input asp-for="OffTime" class="form-control" />
+                <span asp-validation-for="OffTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

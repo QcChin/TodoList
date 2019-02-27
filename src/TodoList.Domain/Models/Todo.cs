@@ -22,6 +22,7 @@ namespace TodoList.Domain.Models
         [MaxLength(255)]
         public string Label { get; set; }
 
+        [Display(Name = "状态")]
         public TodoStatus Status { get; set; }
 
         [Display(Name = "截至时间")]

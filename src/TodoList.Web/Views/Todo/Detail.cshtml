@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TodoList.Domain.Models.TodoItem>
+
+@{
+    ViewData["Title"] = "任务条目";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a href="/TodoItem/Create?todoId=@ViewBag.TodoId" class="btn btn-block btn-success col-2">新增条目</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Todo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Todo)
+            </td>
+            <td>
+                <div>
+                    <a href="/TodoItem/Detail?id=@item.Id" class="btn btn-sm btn-primary">详情</a>
+                    <a href="/TodoItem/Modify?id=@item.Id" class="btn btn-sm btn-success">编辑</a>
+                    <a href="/TodoItem/Delete?id=@item.Id" class="btn btn-sm btn-danger">删除</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

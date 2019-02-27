@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using TodoList.Domain.Models;
 using TodoList.Domain.Interfaces;
+using TodoList.Domain.Specifications;
+using System.Linq.Expressions;
 
 namespace TodoList.Domain.Services
 {
     public class TodoService : ITodoService
     {
-        private readonly IAsyncRepository<Todo> _todoRepository;
+        private readonly ITodoRepository _todoRepository;
         private readonly IAsyncRepository<TodoType> _todoTypeRepository;
         private readonly IAsyncRepository<TodoItem> _todoItemRepository;
 
-        public TodoService(IAsyncRepository<Todo> todoRepository,
+        public TodoService(ITodoRepository todoRepository,
             IAsyncRepository<TodoType> todoTypeRepository,
             IAsyncRepository<TodoItem> todoItemRepository)
         {
@@ -35,6 +37,10 @@ namespace TodoList.Domain.Services
 
         public async Task<bool> CreateTodoTypeAsync(TodoType todoType)
         {
+            var specification = new BaseSpecification<TodoType>(c => c.Name == todoType.Name);
+            var _todoTypes = await _todoTypeRepository.GetAsync(specification);
+            if (_todoTypes.Count > 0)
+                return false;
             return await _todoTypeRepository.AddAsync(todoType);
         }
 
@@ -53,49 +59,60 @@ namespace TodoList.Domain.Services
             return await _todoTypeRepository.DeleteAsync(id);
         }
 
-        public Task<Todo> FindTodoByIdAsync(Guid id)
+        public async Task<Todo> FindTodoByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _todoRepository.GetByIdAsync(id);
         }
 
-        public Task<IEnumerable<TodoItem>> FindTodoItemByIdAsync(Guid id)
+        public async Task<TodoItem> FindTodoItemByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _todoItemRepository.GetByIdAsync(id);
         }
 
-        public Task<IEnumerable<TodoType>> FindTodoTypeByIdAsync(Guid id)
+        public async Task<TodoType> FindTodoTypeByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _todoTypeRepository.GetByIdAsync(id);
         }
 
-        public Task<IEnumerable<TodoItem>> GetTodoItemsAsync(Guid id)
+        public async Task<IEnumerable<TodoType>> GetAllTodoTypesAsync()
         {
-            throw new NotImplementedException();
+            return await _todoTypeRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Todo>> GetTodos(int start, int pageSize)
+        public async Task<IEnumerable<TodoItem>> GetTodoItemsAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var specification = new BaseSpecification<TodoItem>(c => c.TodoId == id);
+            return await _todoItemRepository.GetAsync(specification);
         }
 
-        public Task<IEnumerable<TodoType>> GetTodoTypesAsync(Guid id)
+        public async Task<IEnumerable<Todo>> GetTodosAsync(int start, int pageSize, Guid userId)
         {
-            throw new NotImplementedException();
+            if (userId == default(Guid))
+                throw new ArgumentException($"{nameof(userId)} 错误");
+            var specification = new BaseSpecification<Todo>(c=> c.Creator == userId);
+            specification.ApplyPaging(start,pageSize);
+            return await _todoRepository.GetTodosAsync(specification);
         }
 
-        public Task<bool> UpdateTodoAsync(Todo todo)
+
+        //public Task<IEnumerable<TodoType>> GetTodoTypesAsync(Guid id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<bool> UpdateTodoAsync(Todo todo)
         {
-            throw new NotImplementedException();
+            return await _todoRepository.UpdateAsync(todo);
         }
 
-        public Task<bool> UpdateTodoItemAsynC(TodoItem todoItem)
+        public async Task<bool> UpdateTodoItemAsynC(TodoItem todoItem)
         {
-            throw new NotImplementedException();
+            return await _todoItemRepository.UpdateAsync(todoItem);
         }
 
-        public Task<bool> UpdateTodoTypeAsynC(TodoType todoItem)
+        public async Task<bool> UpdateTodoTypeAsynC(TodoType todoType)
         {
-            throw new NotImplementedException();
+            return await _todoTypeRepository.UpdateAsync(todoType);
         }
     }
 }

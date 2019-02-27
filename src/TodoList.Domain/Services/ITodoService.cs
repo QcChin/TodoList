@@ -15,7 +15,7 @@ namespace TodoList.Domain.Services
 
         Task<bool> DelTodoAsync(Guid id);
 
-        Task<IEnumerable<Todo>> GetTodos(int start, int pageSize);
+        Task<IEnumerable<Todo>> GetTodosAsync(int start, int pageSize, Guid userId);
 
         Task<Todo> FindTodoByIdAsync(Guid id);
         #endregion
@@ -29,7 +29,7 @@ namespace TodoList.Domain.Services
 
         Task<IEnumerable<TodoItem>> GetTodoItemsAsync(Guid id);
 
-        Task<IEnumerable<TodoItem>> FindTodoItemByIdAsync(Guid id);
+        Task<TodoItem> FindTodoItemByIdAsync(Guid id);
 
         #endregion
 
@@ -39,10 +39,9 @@ namespace TodoList.Domain.Services
         Task<bool> UpdateTodoTypeAsynC(TodoType todoType);
 
         Task<bool> DelTodoTypeAsync(Guid id);
+        Task<IEnumerable<TodoType>> GetAllTodoTypesAsync();
 
-        Task<IEnumerable<TodoType>> GetTodoTypesAsync(Guid id);
-
-        Task<IEnumerable<TodoType>> FindTodoTypeByIdAsync(Guid id);
+        Task<TodoType> FindTodoTypeByIdAsync(Guid id);
         #endregion
 
     }

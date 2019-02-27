@@ -12,26 +12,28 @@ namespace TodoList.UnitTest
 {
     public class TodoShould
     {
-        private Mock<IAsyncRepository<Todo>> _mockTodoRepository;
+        private Mock<ITodoRepository> _mockTodoRepository;
         private Mock<IAsyncRepository<TodoType>> _mockTodoTypeRepository;
         private Mock<IAsyncRepository<TodoItem>> _mockTodoItemRepository;
 
         public TodoShould()
         {
-            _mockTodoRepository = new Mock<IAsyncRepository<Todo>>();
-            _mockTodoRepository = new Mock<IAsyncRepository<Todo>>();
+            _mockTodoRepository = new Mock<ITodoRepository>();
+            _mockTodoTypeRepository = new Mock<IAsyncRepository<TodoType>>();
             _mockTodoItemRepository = new Mock<IAsyncRepository<TodoItem>>();
         }
 
         [Fact]
         public async Task AddTodoAsync()
         {
-            var todo = new Todo();
-            _mockTodoRepository.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(todo);
+            var fakeUserId = Guid.NewGuid();
+            var todo = new Todo { Title = "测试标题", OffTime = DateTime.Now };
+            todo.AddModel(fakeUserId);
+            _mockTodoRepository.Setup(x => x.AddAsync(todo))
+                .ReturnsAsync(true);
 
             var todoService = new TodoService(_mockTodoRepository.Object, null, null);
-            await todoService.CreateTodoAsync(todo);
+            var result = await todoService.CreateTodoAsync(todo);
 
         }
     }

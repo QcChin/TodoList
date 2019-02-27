@@ -1,0 +1,30 @@
+﻿@model TodoList.Domain.Models.TodoItem
+
+@{
+    ViewData["Title"] = "条目编辑";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Modify">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" class="form-control" hidden="hidden" />
+            <input asp-for="TodoId" class="form-control" hidden="hidden" />
+            <div class="form-group">
+                <label asp-for="Todo" class="control-label"></label>
+                <textarea asp-for="Todo" class="form-control col-12" rows="15"></textarea>
+                <span asp-validation-for="Todo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="保存" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
