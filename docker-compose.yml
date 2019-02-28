@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  eshopwebmvc:
+  todolist:
     image: todolist
     build:
       context: .

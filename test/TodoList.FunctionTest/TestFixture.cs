@@ -46,16 +46,16 @@ namespace TodoList.FunctionTest
                         .AddEntityFrameworkStores<ApplicationDbContext>()
                         .AddDefaultTokenProviders();
 
-                    var sp = services.BuildServiceProvider();
+                    //var sp = services.BuildServiceProvider();
 
-                    using (var scope = sp.CreateScope())
-                    {
-                        var scopedServices = scope.ServiceProvider;
-                        var db = scopedServices.GetRequiredService<DbContext>();
+                    //using (var scope = sp.CreateScope())
+                    //{
+                    //    var scopedServices = scope.ServiceProvider;
+                    //    var db = scopedServices.GetRequiredService<DbContext>();
 
-                        // Ensure the database is created.
-                        db.Database.EnsureCreated();
-                    }
+                    //    // Ensure the database is created.
+                    //    db.Database.EnsureCreated();
+                    //}
                 });
 
             _server = new TestServer(builder);

@@ -30,7 +30,7 @@ namespace TodoList.Repository.Data
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var entity = await _dbContext.FindAsync<Entity>(id);
+            var entity = await _dbContext.FindAsync<T>(id);
             if (entity == null)
                 return false;
             entity.IsActive = false;

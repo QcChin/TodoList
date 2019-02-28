@@ -11,12 +11,14 @@ using Xunit;
 
 namespace TodoList.FunctionTest
 {
-    public class AccountControllerShould : IClassFixture<TestFixture>
+    public class AccountControllerShould : IClassFixture<WebApplicationFactory<Startup>>
     {
-        public HttpClient Client { get; }
-        public AccountControllerShould(TestFixture fixturr)
+        private readonly WebApplicationFactory<Startup> _webApplicationFactory;
+        public HttpClient Client { get; private set; }
+        public AccountControllerShould(WebApplicationFactory<Startup> webApplicationFactory)
         {
-            Client = fixturr.Client;
+            _webApplicationFactory = webApplicationFactory;
+            Client = _webApplicationFactory.CreateDefaultClient();
         }
 
         [Fact]
@@ -26,7 +28,21 @@ namespace TodoList.FunctionTest
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
 
-            Assert.Contains("demouser@microsoft.com", stringResponse);
+            Assert.Contains("TodoList.Web", stringResponse);
+        }
+        
+
+        [Fact]
+        public async Task RegisterFakeAccount()
+        {
+            var getResponse = await Client.GetAsync("/identity/account/register");
+            getResponse.EnsureSuccessStatusCode();
+            var stringGetResponse = await getResponse.Content.ReadAsStringAsync();
+            Assert.False(string.IsNullOrEmpty(stringGetResponse));
+            Match match = Regex.Match(stringGetResponse, @"\<input name=""__RequestVerificationToken"" type=""hidden"" value=""([^""]+)"" \/\>");
+            var _requestVerificationToken = match.Success ? match.Groups[1].Captures[0].Value : null;
+            //var content = 
+            //Client.PostAsync();
         }
 
         [Fact]

@@ -31,7 +31,7 @@ namespace TodoList.Web.Controllers
                 return Guid.Empty;
             }
         }
-
+        
         public async Task<IActionResult> Index(int? start, int? pageSize)
         {
             var _start = start ?? 0;
