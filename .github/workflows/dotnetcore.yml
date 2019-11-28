@@ -16,4 +16,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: Build with docker
-      run: docker-compose build && docker-compose up 
+      run: docker-compose build
