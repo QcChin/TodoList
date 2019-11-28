@@ -8,7 +8,7 @@ WORKDIR /src
 COPY ["src/TodoList.Web/TodoList.Web.csproj", "src/TodoList.Web/"]
 RUN dotnet restore "src/TodoList.Web/TodoList.Web.csproj"
 COPY . .
-WORKDIR "/src/TodoList.Web"
+WORKDIR "/src/src/TodoList.Web"
 RUN dotnet build "TodoList.Web.csproj" -c Release -o /app
 
 FROM build AS publish
